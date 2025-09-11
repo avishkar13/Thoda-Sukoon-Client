@@ -2,7 +2,7 @@
 import axios from "axios";
 import useAuthStore from "../store/authStore";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api/chat" });
+const API = axios.create({ baseURL: "https://thoda-sukoon-server.onrender.com/api/chat" });
 
 // Attach token to every request
 API.interceptors.request.use((config) => {

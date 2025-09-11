@@ -125,7 +125,8 @@ const AuthForm = ({ mode = "login" }) => {
         </div>
 
          {/* ✅ Google Login Button */}
-        <GoogleLogin
+         <div className="flex justify-center mx-auto">
+          <GoogleLogin
           onSuccess={async (credentialResponse) => {
             const id_token = credentialResponse.credential;
             await googleLogin(id_token);
@@ -135,6 +136,8 @@ const AuthForm = ({ mode = "login" }) => {
             console.log("Google Login Failed");
           }}
         />
+         </div>
+        
 
         <p className="mt-4 text-gray-400 text-center">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}

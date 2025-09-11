@@ -1,7 +1,7 @@
 // src/api/assessmentApi.js
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/assessments";
+const API_URL = "https://thoda-sukoon-server.onrender.com/api/assessments";
 
 export const submitPHQ9 = async (responses, token) => {
   const res = await axios.post(`${API_URL}/phq9`, { responses }, {
