@@ -1,7 +1,9 @@
 // src/api/authApi.js
 import axios from "axios";
 
-const API_URL = "https://thoda-sukoon-server.onrender.com/api/users"; // base URL 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5173";
+
+const API_URL = axios.create({ baseURL: `${BASE_URL}/api/auth` });
 
 // --- Register User ---
 export const registerUser = (data) => {

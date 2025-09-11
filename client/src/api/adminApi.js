@@ -1,8 +1,9 @@
 import axios from "axios";
 import useAuthStore from "../store/authStore";
 
-const API = axios.create({ baseURL: "https://thoda-sukoon-server.onrender.com/api/admin" });
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5173";
 
+const API = axios.create({ baseURL: `${BASE_URL}/api/admin` });
 // Attach token
 API.interceptors.request.use(config => {
   const token = useAuthStore.getState().token;

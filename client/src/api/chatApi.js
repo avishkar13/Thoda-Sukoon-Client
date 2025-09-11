@@ -2,7 +2,9 @@
 import axios from "axios";
 import useAuthStore from "../store/authStore";
 
-const API = axios.create({ baseURL: "https://thoda-sukoon-server.onrender.com/api/chat" });
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5173";
+
+const API = axios.create({ baseURL: `${BASE_URL}/api/chat` });
 
 // Attach token to every request
 API.interceptors.request.use((config) => {
