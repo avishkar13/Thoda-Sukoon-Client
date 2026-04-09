@@ -7,7 +7,6 @@ const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false); // mobile nav
   const [showProfile, setShowProfile] = useState(false); // profile dropdown
-  const [loadingUser, setLoadingUser] = useState(true);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -15,33 +14,15 @@ const Navbar = () => {
     { name: "Book", path: "/book" },
     { name: "Test", path: "/test" },
     { name: "Resources", path: "/resources" },
-    { name: "Forum", path: "/forum" },
+    // { name: "Forum", path: "/forum" },
   ];
 
-  const { user, logout, fetchUser } = useAuthStore();
-
-useEffect(() => {
-  const loadUser = async () => {
-    await fetchUser();
-    setLoadingUser(false);
-  };
-  loadUser();
-}, [fetchUser]);
+  const { user, logout } = useAuthStore();
 
   useEffect(() => {
-  setIsOpen(false);       
-  setShowProfile(false);  
-}, [user]);
-
-if (loadingUser) {
-  return (
-    <nav className="sticky top-0 z-50 bg-black/40 backdrop-blur-md border-b border-gray-800">
-      <div className="container mx-auto flex items-center justify-between px-6 py-3">
-        <span className="text-gray-400">Loading...</span>
-      </div>
-    </nav>
-  );
-}
+    setIsOpen(false);
+    setShowProfile(false);
+  }, [user, location.pathname]);
 
   return (
     <nav className="sticky top-0 z-50 bg-black/40 backdrop-blur-md border-b border-gray-800">
@@ -101,7 +82,7 @@ if (loadingUser) {
               </Link>
               <Link
                 to="/signup"
-                className="px-4 py-2 bg-teal-500 hover:bg-teal-600 rounded-xl text-white font-semibold transition cursor-pointer"
+                className="hidden md:block px-4 py-2 bg-teal-500 hover:bg-teal-600 rounded-xl text-white font-semibold transition cursor-pointer"
               >
                 Sign Up
               </Link>
@@ -111,23 +92,45 @@ if (loadingUser) {
               {/* Profile button */}
               <button
                 onClick={() => setShowProfile(!showProfile)}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-700 transition cursor-pointer  "
+                className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 transition cursor-pointer"
               >
-                <UserIcon size={20} />
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600">
+                  <UserIcon size={18} />
+                </div>
+                <span className="hidden sm:inline text-sm font-medium text-gray-200">
+                  {user.name?.split(" ")[0]}
+                </span>
               </button>
 
               {/* Profile Dropdown */}
               {showProfile && (
-                <div className="absolute right-0 top-12 w-64 bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-4 space-y-2 z-50 ">
-                  <p className="text-white font-semibold">{user.name}</p>
-                  <p className="text-gray-400 text-sm">{user.email}</p>
-                  <p className="text-gray-300 text-sm">Role: {user.role}</p>
-                  <p className="text-gray-300 text-sm">
-                    Language: {user.preferences?.language}
-                  </p>
+                <div className="absolute right-0 top-12 w-64 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl p-4 space-y-2 z-50">
+                  <div className="pb-2 mb-2 border-b border-gray-700">
+                    <p className="text-white font-semibold">{user.name || "User"}</p>
+                    {user.email && (
+                      <p className="text-gray-400 text-xs truncate">{user.email}</p>
+                    )}
+                    {!user.email && user.aliasId && (
+                      <p className="text-gray-400 text-xs truncate">ID: {user.aliasId}</p>
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-gray-300 text-xs flex justify-between">
+                      <span>Role:</span>
+                      <span className="text-indigo-400 font-medium capitalize">
+                        {user.role || "student"}
+                      </span>
+                    </p>
+                    {user.preferences?.language && (
+                      <p className="text-gray-300 text-xs flex justify-between">
+                        <span>Language:</span>
+                        <span className="text-teal-400">{user.preferences.language}</span>
+                      </p>
+                    )}
+                  </div>
                   <button
                     onClick={logout}
-                    className="w-full mt-3 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-semibold transition cursor-pointer"
+                    className="w-full mt-3 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 rounded-lg font-semibold transition cursor-pointer text-sm"
                   >
                     Logout
                   </button>
@@ -139,7 +142,7 @@ if (loadingUser) {
           {/* Hamburger (mobile only) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-gray-300 hover:text-white transition cursor-pointer"
+            className="md:hidden text-gray-300 hover:text-white transition cursor-pointer p-1"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
