@@ -6,16 +6,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/",
-  build: {
-    outDir: "dist",
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        // Ensure assets are served from the root
-        assetFileNames: "assets/[name].[hash][extname]",
-        chunkFileNames: "assets/js/[name].[hash].js",
-        entryFileNames: "assets/js/[name].[hash].js",
-      },
-    },
-  },
-})
+});
